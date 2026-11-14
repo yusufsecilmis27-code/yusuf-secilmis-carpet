@@ -1,28 +1,62 @@
-# Yusuf Seçilmiş Carpet - B2B Toptan Halı Sitesi
+# Yusuf Seçilmiş Carpet — web sitesi
 
-Statik site (HTML/CSS/JS). Sunucu, veritabanı veya derleme gerekmez.
+Saf HTML/CSS/JS üreten, bağımlılığı olmayan statik site. Veriler JSON dosyalarında durur;
+`node build.js` komutu 6 dilde (tr, en, ar, ru, fr, ka) tüm sayfaları `dist/` klasörüne yazar.
 
-## 1. Projeyi açma ve 2. Local çalıştırma
-Klasörde terminal açın: `python -m http.server 8000` ve tarayıcıda `http://localhost:8000` adresine gidin.
+## Çalıştırma
 
-## Görselleri yerleştirme
-Görseller pakette yoktur. Orijinal klasörlerinizin bulunduğu dizini verin:
-`python tools/rename_images.py "C:/yol/kaynak-klasor"`
-Betik, `tools/mapping.csv` eşleşmesine göre 119 JPEG + 1 MP4 dosyayı `images/products/<urun>/` altına güvenli adlarla kopyalar. Hero görseli olarak 1500 Reeds ilk görseli kullanılır.
+    node build.js                 # dist/ klasörünü üretir (Node 18+)
+    node serve.js                 # derler ve http://localhost:8080 adresinde açar
 
-## 3. Ürün ekleme / 4. silme / 5. görsel değiştirme
-`js/products.js` içindeki `products` dizisini düzenleyin:
-`{ id:"yeni-urun", name:"Ürün Adı", cat:"modern", f:["modern"], images:["images/products/yeni-urun/1.jpeg"], specifications:{} }`
-Silmek için ilgili bloğu kaldırın. Görsel değiştirmek için dosyayı aynı adla üzerine yazın. Yeni ürünün detay sayfası için `tools/build.py` içindeki `PR` listesine ekleyip `python tools/build.py` çalıştırın. Ürün açıklamaları `js/translations.js` içinde `d_<id>` anahtarıyla yazılır.
+Windows: `baslat.bat` dosyasına çift tıklayın. `dist/index.html` dosyasını çift tıklayarak
+açmayın; adresler kökten başladığı için stil ve bağlantılar çalışmaz.
 
-## 6-9. WhatsApp, telefon, e-posta, sosyal medya
-`js/products.js` en üstündeki `config` alanı: `whatsapp` (ör. 905321234567, + olmadan), `phone`, `email`, `instagram`, `facebook`, `address`. Boş alanlar sitede görünmez.
+## Yayın (GitHub Pages)
 
-## 10. Dil sistemi
-Tüm metinler `js/translations.js` içindedir (tr, en, ar). Arapçada sayfa otomatik RTL olur. Meta etiketleri (title/description) yalnızca Türkçedir.
+1. Bu klasörün içeriğini deponuzun `main` dalına gönderin.
+2. GitHub > Settings > Pages > Source: **GitHub Actions** seçin.
+3. Her push'ta `.github/workflows/deploy.yml` siteyi derleyip yayınlar.
 
-## 11-12. GitHub Pages ve domain
-Depoya yükleyin, Settings > Pages'ten ana dalı seçin. `CNAME` dosyası `yusufsecilmiscarpet.com` içerir; DNS'te alan adını GitHub Pages'e yönlendirin. Tüm yollar göreceli, 404 sayfası ise kök alan adı (`/`) varsayar.
+Alan adı `data/site.json > baseUrl` değerinden alınır ve `CNAME` dosyası otomatik yazılır.
+Şu an `https://yusufsecilmiscarpet.com` (www'siz). www'li kullanıyorsanız orayı değiştirin.
 
-## 13. SEO
-Sayfa başlıkları ve açıklamaları `tools/build.py` içinde; değiştirip `python tools/build.py` çalıştırın. `sitemap.xml` ve `robots.txt` üretilir. Fiyat, puan, stok gibi doğrulanmamış veri kullanılmaz.
+## Ürün ekleme
+
+1. `data/products/` içine `<kod>.json` dosyası ekleyin (örnek: `ornek-001.json`).
+2. Fotoğrafları `src/images/products/<kod-küçük-harf>/` klasörüne koyun ve dosya adlarını
+   `images` listesine yazın. İlk fotoğraf kapak olur.
+3. Push edin. Ürün sayfaları, filtreler, sitemap ve hreflang kendiliğinden güncellenir.
+
+Alanlar:
+
+| Alan | Açıklama |
+| --- | --- |
+| `code` | Ürün kodu. Adreste ve WhatsApp mesajında kullanılır, benzersiz olmalı. |
+| `category` | `data/categories.json` içindeki `id` değerlerinden biri. |
+| `material` | acrylic, pp, polyester, cotton, sisal, mixed (çevirileri `data/i18n/*.json > materials`). |
+| `colors` | red, green, blue, beige, brown, grey, cream, black, multi (`data/site.json > colors`). |
+| `sizes` | Serbest metin listesi, örn. `"160x230 cm"`. |
+| `pile_mm`, `weight_gsm` | Sayı. Boş bırakılırsa satır gösterilmez. |
+| `name`, `desc`, `backing`, `packing` | Dil bazında metin: `{"tr": "...", "en": "..."}`. Eksik dilde İngilizce, o da yoksa Türkçe gösterilir. |
+| `images` | Fotoğraf dosya adları. |
+| `example` | `true` ise sayfa Google'a kapalıdır (noindex) ve sitemap'e girmez. Gerçek ürünlerde yazmayın. |
+
+`ornek-001/002/003` örnek ürünlerdir; gerçek ürünler gelince silin.
+
+## Diğer içerikler
+
+- **Metinler:** `data/i18n/<dil>.json`. Tüm sayfa metinleri, başlıklar ve meta açıklamaları burada.
+- **Kategoriler:** `data/categories.json`. Bir kategoriye o dile özel giriş metni vermek için
+  `"intro": {"tr": "...", "en": "..."}` ekleyin; yoksa genel şablon kullanılır. Kategoriye
+  fotoğraf vermek için `"image": "images/kategori/cami.jpg"` ekleyin.
+- **Ana sayfa fotoğrafı:** `data/site.json > heroImage` (örn. `"images/hero.jpg"`, dosya `src/images/` altında).
+- **Blog:** `data/blog/<dil>/<slug>.json` →
+  `{"slug": "...", "title": "...", "date": "2026-12-01", "description": "...", "html": "<p>...</p>"}`.
+  Bir dilde yazı varsa o dilin menüsünde Blog görünür.
+- **Eski adresler:** `data/site.json > redirects`.
+
+## Bilinen eksikler
+
+- Fotoğraflar olduğu gibi kopyalanır; WebP'ye çevirme ve küçültme adımı henüz yok. Yüklemeden
+  önce uzun kenarı ~1600 px olacak şekilde küçültün.
+- Arapça, Rusça, Fransızca ve Gürcüce metinleri anadili konuşan biri gözden geçirmeli.
