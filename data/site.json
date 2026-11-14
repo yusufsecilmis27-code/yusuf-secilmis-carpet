@@ -97,5 +97,19 @@
     "spot.html": "/tr/urunler/",
     "about.html": "/tr/tedarik-kalite/",
     "contact.html": "/tr/iletisim/"
-  }
+  },
+  "heroImages": [
+    {
+      "src": "images/products/pp1/1.jpg",
+      "product": "pp1"
+    },
+    {
+      "src": "images/products/akr1/15.jpg",
+      "product": "akr1"
+    },
+    {
+      "src": "images/products/pes6/1.jpg",
+      "product": "pes6"
+    }
+  ]
 }

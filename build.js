@@ -231,7 +231,9 @@ const whoCards = (l, linked) => `<div class="grid g4">${T[l].who.items.map(([a, 
 /* ---------- sayfalar ---------- */
 function pageHome(l) {
   const t = T[l];
-  const hero = site.heroImage ? `<img class="hero-img" src="/${site.heroImage}" alt="${esc(t.home.h1)}">` : `<div class="hero-art">${ph('p1 tall', pick(catById.polyester.name, l))}<div class="hero-art-col">${ph('p2', pick(catById.shaggy.name, l))}${ph('p6', pick(catById.mosque.name, l))}</div></div>`;
+  const heroImg = (h, cls) => { const p = products.find((x) => x.code.toLowerCase() === h.product); return `<a class="hero-tile ${cls}" href="${p ? url.product(p, l) : url.products(l)}"><img src="/${h.src}" alt="${esc(p ? pick(p.name, l) : site.name)}"${cls === 'big' ? '' : ' loading="lazy"'}>${p ? `<span>${esc(pick(p.name, l))}</span>` : ''}</a>`; };
+  const H = site.heroImages || [];
+  const hero = H.length >= 3 ? `<div class="hero-art hero-photos">${heroImg(H[0], 'big')}<div class="hero-art-col">${heroImg(H[1], 'small')}${heroImg(H[2], 'small')}</div></div>` : site.heroImage ? `<img class="hero-img" src="/${site.heroImage}" alt="${esc(t.home.h1)}">` : `<div class="hero-art">${ph('p1 tall', pick(catById.polyester.name, l))}<div class="hero-art-col">${ph('p2', pick(catById.shaggy.name, l))}${ph('p6', pick(catById.mosque.name, l))}</div></div>`;
   const body = `<section class="wrap hero"><div class="hero-text">
 <p class="eyebrow">${esc(t.home.eyebrow)}</p><h1>${esc(t.home.h1)}</h1><p class="lead">${esc(t.home.lead)}</p>
 <div class="btns"><a class="btn btn-wa btn-lg" href="${wa(t.wa.general)}" rel="noopener">${esc(t.cta.wa)}</a><a class="btn btn-outline btn-lg" href="${url.products(l)}">${esc(t.cta.browse)}</a></div>
