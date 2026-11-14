@@ -318,7 +318,7 @@ ${related.length ? `<section class="wrap sec"><h2>${esc(t.product.related)}</h2>
 function pageWholesale(l) {
   const t = T[l], w = t.wholesale;
   const body = `<section class="wrap hero hero-sm"><div class="hero-text"><p class="eyebrow">${esc(w.eyebrow)}</p><h1>${esc(w.h1)}</h1><p class="lead">${esc(w.lead)}</p>
-<div class="btns"><a class="btn btn-wa btn-lg" href="${wa(t.wa.general)}" rel="noopener">${esc(t.cta.wa)}</a><a class="btn btn-outline btn-lg" href="#quote">${esc(t.cta.quote)}</a></div></div>${site.wholesaleImage ? `<img class="hero-img" src="/${site.wholesaleImage}" alt="${esc(w.eyebrow)}">` : ph('p3 tall', w.eyebrow)}</section>
+<div class="btns"><a class="btn btn-wa btn-lg" href="${wa(t.wa.general)}" rel="noopener">${esc(t.cta.wa)}</a><a class="btn btn-outline btn-lg" href="#quote">${esc(t.cta.quote)}</a></div></div>${site.wholesaleImage ? `<img class="hero-img hero-wh" src="/${site.wholesaleImage}" alt="${esc(w.eyebrow)}">` : ph('p3 tall', w.eyebrow)}</section>
 <section class="band-white"><div class="wrap sec"><h2>${esc(w.whoTitle)}</h2>${whoCards(l, false)}</div></section>
 <section class="wrap sec"><div><h2>${esc(w.deliveryTitle)}</h2><p class="lead">${esc(w.deliveryNote)}</p></div><div class="grid g3">${w.delivery.map(([k, a, b]) => `<div class="box box-cream"><p class="eyebrow">${esc(k)}</p><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
 <section class="band-dark"><div class="wrap sec-tight"><h2>${esc(w.regionsTitle)}</h2><ul class="regions">${w.regions.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div></section>
