@@ -163,7 +163,8 @@ ${o.body}
 <div class="footer-col"><strong>${esc(t.footer.products)}</strong>${site.featured.slice(0, 4).map((id) => `<a href="${url.cat(catById[id], l)}">${esc(pick(catById[id].name, l))}</a>`).join('')}<a href="${url.products(l)}">${esc(t.cta.allCats)}</a></div>
 <div class="footer-col"><strong>${esc(t.footer.company)}</strong><a href="${url.wholesale(l)}">${esc(t.nav.wholesale)}</a><a href="${url.sourcing(l)}">${esc(t.nav.sourcing)}</a>${hasBlog ? `<a href="${url.blog(l)}">${esc(t.nav.blog)}</a>` : ''}<a href="${url.contact(l)}">${esc(t.nav.contact)}</a></div>
 <div class="footer-col"><strong>${esc(t.nav.contact)}</strong><span>${esc(addressLine)}</span><a href="tel:${site.phone}" dir="ltr">${site.phoneDisplay}</a><a href="mailto:${site.email}">${site.email}</a><a href="${site.instagram}" rel="noopener">Instagram ${esc(site.instagramHandle)}</a><span>Facebook: ${esc(site.facebookName)}</span></div>
-</div></footer>
+</div>
+<div class="footer-credit" dir="ltr"><a href="https://sandcodetr.com/" target="_blank" rel="noopener">Prod by Sand Code TR</a></div></footer>
 <div class="mobilebar"><a class="btn btn-outline" href="tel:${site.phone}">${esc(t.cta.call)}</a><a class="btn btn-wa" href="${waGeneral}" rel="noopener">${esc(t.cta.wa)}</a></div>
 <script src="/js/main.js" defer></script>
 </body>
