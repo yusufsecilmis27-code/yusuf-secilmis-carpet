@@ -168,6 +168,7 @@ ${o.body}
 `;
 }
 
+const catCover = (c) => { if (c.image) return '/' + c.image; const p = products.find((x) => x.category === c.id && (x.images || []).length); return p ? imgUrl(p, p.images[0]) : null; };
 const crumbs = (items) => `<nav class="crumbs" aria-label="breadcrumb">${items.map(([n, u], i) => (i < items.length - 1 ? `<a href="${u}">${esc(n)}</a><span aria-hidden="true">/</span>` : `<span aria-current="page">${esc(n)}</span>`)).join('')}</nav>`;
 const ph = (cls, label) => `<div class="ph ${cls}" role="img" aria-label="${esc(label)}"></div>`;
 
@@ -240,7 +241,7 @@ function pageHome(l) {
 <ul class="trust">${t.home.trust.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>${hero}</section>
 ${(() => { const hp = products.filter((p) => p.home); return hp.length ? `<section class="band-white"><div class="wrap sec"><div class="sec-head"><div><p class="eyebrow">${esc(t.home.newEyebrow)}</p><h2>${esc(t.home.newTitle)}</h2></div><a class="link" href="${url.products(l)}">${esc(t.cta.allCats)}</a></div><div class="cards">${hp.map((p) => productCard(p, l, true)).join('')}</div></div></section>` : ''; })()}
 <section class="wrap sec"><div class="sec-head"><div><p class="eyebrow">${esc(t.home.catsEyebrow)}</p><h2>${esc(t.home.catsTitle)}</h2></div><a class="link" href="${url.products(l)}">${esc(t.cta.allCats)}</a></div>
-<div class="grid g3">${site.featured.map((id) => { const c = catById[id]; return `<a class="tile" href="${url.cat(c, l)}">${c.image ? `<img src="/${c.image}" alt="${esc(pick(c.name, l))}" loading="lazy">` : ph(c.pattern, pick(c.name, l))}<span class="tile-name">${esc(pick(c.name, l))}</span></a>`; }).join('')}</div></section>
+<div class="grid g3">${site.featured.map((id) => { const c = catById[id]; return `<a class="tile" href="${url.cat(c, l)}">${catCover(c) ? `<img src="${catCover(c)}" alt="${esc(pick(c.name, l))}" loading="lazy">` : ph(c.pattern, pick(c.name, l))}<span class="tile-name">${esc(pick(c.name, l))}</span></a>`; }).join('')}</div></section>
 <section class="wrap sec"><h2 class="narrow">${esc(t.why.title)}</h2><div class="grid g4">${t.why.items.map(([a, b]) => `<div class="feature"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
 <section class="band-cream"><div class="wrap sec"><div><p class="eyebrow">${esc(t.who.eyebrow)}</p><h2>${esc(t.who.title)}</h2></div>${whoCards(l, true)}</div></section>
 <section class="wrap sec"><h2>${esc(t.steps.title)}</h2><ol class="grid g4 steps">${t.steps.items.map(([a, b], i) => `<li><span class="num">${i + 1}</span><h3>${esc(a)}</h3><p>${esc(b)}</p></li>`).join('')}</ol></section>
@@ -317,7 +318,7 @@ ${related.length ? `<section class="wrap sec"><h2>${esc(t.product.related)}</h2>
 function pageWholesale(l) {
   const t = T[l], w = t.wholesale;
   const body = `<section class="wrap hero hero-sm"><div class="hero-text"><p class="eyebrow">${esc(w.eyebrow)}</p><h1>${esc(w.h1)}</h1><p class="lead">${esc(w.lead)}</p>
-<div class="btns"><a class="btn btn-wa btn-lg" href="${wa(t.wa.general)}" rel="noopener">${esc(t.cta.wa)}</a><a class="btn btn-outline btn-lg" href="#quote">${esc(t.cta.quote)}</a></div></div>${ph('p3 tall', w.eyebrow)}</section>
+<div class="btns"><a class="btn btn-wa btn-lg" href="${wa(t.wa.general)}" rel="noopener">${esc(t.cta.wa)}</a><a class="btn btn-outline btn-lg" href="#quote">${esc(t.cta.quote)}</a></div></div>${site.wholesaleImage ? `<img class="hero-img" src="/${site.wholesaleImage}" alt="${esc(w.eyebrow)}">` : ph('p3 tall', w.eyebrow)}</section>
 <section class="band-white"><div class="wrap sec"><h2>${esc(w.whoTitle)}</h2>${whoCards(l, false)}</div></section>
 <section class="wrap sec"><div><h2>${esc(w.deliveryTitle)}</h2><p class="lead">${esc(w.deliveryNote)}</p></div><div class="grid g3">${w.delivery.map(([k, a, b]) => `<div class="box box-cream"><p class="eyebrow">${esc(k)}</p><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
 <section class="band-dark"><div class="wrap sec-tight"><h2>${esc(w.regionsTitle)}</h2><ul class="regions">${w.regions.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div></section>

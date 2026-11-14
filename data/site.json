@@ -51,9 +51,9 @@
     "mosque",
     "pp",
     "polyester",
-    "shaggy",
-    "prayer",
-    "kids"
+    "acrylic",
+    "sisal",
+    "nonslip"
   ],
   "colors": {
     "red": "#7A1F23",
@@ -111,5 +111,6 @@
       "src": "images/products/pes6/1.jpg",
       "product": "pes6"
     }
-  ]
+  ],
+  "wholesaleImage": "images/products/dkr6/1.jpg"
 }
