@@ -65,6 +65,9 @@ const wa = (msg) => `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(ms
 const addressLine = `${site.address.street}, ${site.address.postalCode} ${site.address.district}/${site.address.city}`;
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.name + ' ' + addressLine)}`;
 const imgUrl = (p, f) => `/images/products/${p.code.toLowerCase()}/${f}`;
+const sized = (p, f, k) => { const stem = f.replace(/\.[^.]+$/, ''); const rel = `images/products/${p.code.toLowerCase()}/${k}/${stem}.webp`; return fs.existsSync(path.join(ROOT, 'src', rel)) ? '/' + rel : imgUrl(p, f); };
+const imgM = (p, f) => sized(p, f, 'm');
+const imgT = (p, f) => sized(p, f, 't');
 const sitemap = [];
 
 function write(urlPath, html) {
@@ -168,7 +171,7 @@ ${o.body}
 `;
 }
 
-const catCover = (c) => { if (c.image) return '/' + c.image; const p = products.find((x) => x.category === c.id && (x.images || []).length); return p ? imgUrl(p, p.images[0]) : null; };
+const catCover = (c) => { if (c.image) return '/' + c.image; const p = products.find((x) => x.category === c.id && (x.images || []).length); return p ? imgT(p, p.images[0]) : null; };
 const crumbs = (items) => `<nav class="crumbs" aria-label="breadcrumb">${items.map(([n, u], i) => (i < items.length - 1 ? `<a href="${u}">${esc(n)}</a><span aria-hidden="true">/</span>` : `<span aria-current="page">${esc(n)}</span>`)).join('')}</nav>`;
 const ph = (cls, label) => `<div class="ph ${cls}" role="img" aria-label="${esc(label)}"></div>`;
 
@@ -177,7 +180,7 @@ function productCard(p, l, showCat) {
   const c = catById[p.category];
   const name = pick(p.name, l);
   const img = (p.images || [])[0];
-  const media = img ? `<img src="${imgUrl(p, img)}" alt="${esc(name)} – ${esc(pick(c.name, l))}" loading="lazy">` : ph(c.pattern, name);
+  const media = img ? `<img src="${imgT(p, img)}" alt="${esc(name)} – ${esc(pick(c.name, l))}" loading="lazy">` : ph(c.pattern, name);
   const meta = [p.material ? t.materials[p.material] || p.material : '', showCat ? pick(c.name, l) : ''].filter(Boolean).join(' · ');
   return `<article class="card" data-cat="${c.id}" data-material="${esc(p.material || '')}" data-colors="${esc((p.colors || []).join(' '))}" data-text="${esc((p.code + ' ' + name).toLowerCase())}">
 <a class="card-img" href="${url.product(p, l)}">${media}${p.badge ? `<span class="badge badge-card">${esc(pick(p.badge, l))}</span>` : ''}</a>
@@ -232,7 +235,7 @@ const whoCards = (l, linked) => `<div class="grid g4">${T[l].who.items.map(([a, 
 /* ---------- sayfalar ---------- */
 function pageHome(l) {
   const t = T[l];
-  const heroImg = (h, cls) => { const p = products.find((x) => x.code.toLowerCase() === h.product); return `<a class="hero-tile ${cls}" href="${p ? url.product(p, l) : url.products(l)}"><img src="/${h.src}" alt="${esc(p ? pick(p.name, l) : site.name)}"${cls === 'big' ? '' : ' loading="lazy"'}>${p ? `<span>${esc(pick(p.name, l))}</span>` : ''}</a>`; };
+  const heroImg = (h, cls) => { const p = products.find((x) => x.code.toLowerCase() === h.product); return `<a class="hero-tile ${cls}" href="${p ? url.product(p, l) : url.products(l)}"><img src="${p ? imgM(p, h.src.split('/').pop()) : '/' + h.src}" alt="${esc(p ? pick(p.name, l) : site.name)}"${cls === 'big' ? '' : ' loading="lazy"'}>${p ? `<span>${esc(pick(p.name, l))}</span>` : ''}</a>`; };
   const H = site.heroImages || [];
   const hero = H.length >= 3 ? `<div class="hero-art hero-photos">${heroImg(H[0], 'big')}<div class="hero-art-col">${heroImg(H[1], 'small')}${heroImg(H[2], 'small')}</div></div>` : site.heroImage ? `<img class="hero-img" src="/${site.heroImage}" alt="${esc(t.home.h1)}">` : `<div class="hero-art">${ph('p1 tall', pick(catById.polyester.name, l))}<div class="hero-art-col">${ph('p2', pick(catById.shaggy.name, l))}${ph('p6', pick(catById.mosque.name, l))}</div></div>`;
   const body = `<section class="wrap hero"><div class="hero-text">
@@ -276,7 +279,7 @@ function pageProduct(p, l) {
   const trail = [[t.nav.home, url.home(l)], [t.nav.products, url.products(l)], [catName, url.cat(c, l)], [name, url.product(p, l)]];
   const imgs = p.images || [];
   const gallery = imgs.length
-    ? `<div class="gallery${p.contain ? ' contain' : ''}${p.wide ? ' wide' : ''}${p.labels ? ' labeled' : ''}"><img class="gallery-main" data-main src="${imgUrl(p, imgs[0])}" alt="${esc(name)} – ${esc(p.labels ? pick(p.labels[0], l) : catName)}">${p.labels ? `<p class="gallery-cap" data-cap>${esc(pick(p.labels[0], l))}</p>` : ''}${imgs.length > 1 ? `<div class="thumbs">${imgs.map((f, i) => { const cap = p.labels ? pick(p.labels[i], l) : ''; return `<button type="button" data-thumb="${imgUrl(p, f)}" data-cap-text="${esc(cap)}" aria-label="${esc(cap || t.product.photo + ' ' + (i + 1))}"${i === 0 ? ' aria-current="true"' : ''}><img src="${imgUrl(p, f)}" alt="" loading="lazy">${cap ? `<span>${esc(cap)}</span>` : ''}</button>`; }).join('')}</div>` : ''}</div>`
+    ? `<div class="gallery${p.contain ? ' contain' : ''}${p.wide ? ' wide' : ''}${p.labels ? ' labeled' : ''}"><img class="gallery-main" data-main src="${imgM(p, imgs[0])}" fetchpriority="high" alt="${esc(name)} – ${esc(p.labels ? pick(p.labels[0], l) : catName)}">${p.labels ? `<p class="gallery-cap" data-cap>${esc(pick(p.labels[0], l))}</p>` : ''}${imgs.length > 1 ? `<div class="thumbs">${imgs.map((f, i) => { const cap = p.labels ? pick(p.labels[i], l) : ''; return `<button type="button" data-thumb="${imgM(p, f)}" data-cap-text="${esc(cap)}" aria-label="${esc(cap || t.product.photo + ' ' + (i + 1))}"${i === 0 ? ' aria-current="true"' : ''}><img src="${imgT(p, f)}" alt="" loading="lazy">${cap ? `<span>${esc(cap)}</span>` : ''}</button>`; }).join('')}</div>` : ''}</div>`
     : `<div class="gallery">${ph(c.pattern + ' gallery-main', name)}</div>`;
   const vids = (p.videos || []).length ? `<div class="videos"><h2 class="label">${esc(t.product.videos)}</h2><div class="video-grid">${p.videos.map((v) => `<video controls playsinline preload="none" poster="${imgUrl(p, v.poster)}"><source src="${imgUrl(p, v.file)}" type="video/mp4"></video>`).join('')}</div></div>` : '';
   const rows = [
