@@ -373,6 +373,7 @@ function pageRoot() {
 ${hre}
 <link rel="alternate" hreflang="x-default" href="${abs('/')}">
 <meta property="og:title" content="${esc(site.name)}"><meta property="og:image" content="${abs('/images/og.jpg')}"><meta property="og:url" content="${abs('/')}">
+<script>(function(){var L=${JSON.stringify(LANGS)},M={az:'tr',tk:'tr',kk:'ru',ky:'ru',uz:'ru',tg:'ru',be:'ru',uk:'ru',hy:'ru'},l;try{l=localStorage.getItem('lang')}catch(e){}if(L.indexOf(l)<0){l=null;var n=navigator.languages||[navigator.language||''];for(var i=0;i<n.length&&!l;i++){var c=String(n[i]).toLowerCase().split('-')[0];if(L.indexOf(c)>-1)l=c;else if(M[c])l=M[c]}}location.replace('/'+(l||'${site.defaultLang}')+'/')})();</script>
 <link rel="icon" href="/images/favicon.png">
 <link rel="stylesheet" href="${f.href}"><style>:root{--head:${f.head};--body:${f.body}}</style>
 <link rel="stylesheet" href="/css/style.css">

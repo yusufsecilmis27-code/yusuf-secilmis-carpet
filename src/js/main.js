@@ -2,6 +2,11 @@
 (function () {
   'use strict';
 
+  // Seçilen dili hatırla (kök adres bir sonraki girişte buna yönlendirir)
+  document.querySelectorAll('.langs a[lang]').forEach(function (a) {
+    a.addEventListener('click', function () { try { localStorage.setItem('lang', a.getAttribute('lang')); } catch (e) {} });
+  });
+
   // Mobil menü
   var btn = document.querySelector('.menu-btn');
   var nav = document.getElementById('nav');
